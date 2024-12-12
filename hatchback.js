@@ -8,9 +8,9 @@ const prompt = require("prompt-sync")();
 var RAM = Array(65535).fill(0);
 // this is NOT efficient at all LMFAOOO
 
-// each byte is 16 bits, max is 0xFFFFFF (16777215)
+// each address in RAM is 24 bits, max is 0xFFFFFF (16777215)
 
-// 0000 - 00FE is for byte storage ("ByRAM")
+// 0000 - 00FE is for storage ("ByRAM")
 // 00FF - FEFF is for the program  ("ProgRAM")
 // FF00 - FFFF is for the interpreter ("IntMEM")
 
