@@ -33,8 +33,8 @@ if (file.length + 255 >= 65280) {
 // write file to "ProgRAM" (00FF - FF00)
 for (simv(0x00, 0); gimv(0x00) < file.length; simv(0x00, gimv(0x00) + 1)) {
     RAM[gimv(0x00) + 255] = parseInt(file[gimv(0x00)]);
-    if(isNaN(RAM[gimv(0x00)+255])){
-        throwError(5,(gimv(0x00)+255).toString(16).toUpperCase());
+    if (isNaN(RAM[gimv(0x00) + 255])) {
+        throwError(5, (gimv(0x00) + 255).toString(16).toUpperCase());
     }
 }
 
@@ -238,8 +238,8 @@ for (simv(0x01, 0); RAM[gimv(0x01) + 255] != 0xFFFF; simv(0x01, gimv(0x01) + 1))
         // required arguments: 1 (position)
         simv(0x03, RAM[gimv(0x01) + 256]); //position
         setRAMaddr(gimv(0x03), parseInt(prompt(">")));// set value in memory
-        if(isNaN(RAM[gimv(0x03)])){ // if it's NaN, error
-            throwError(5,(gimv(0x03)).toString(16).toUpperCase());
+        if (isNaN(RAM[gimv(0x03)])) { // if it's NaN, error
+            throwError(5, (gimv(0x03)).toString(16).toUpperCase());
         }
 
         simv(0x03, 0); // clear 
@@ -252,10 +252,10 @@ for (simv(0x01, 0); RAM[gimv(0x01) + 255] != 0xFFFF; simv(0x01, gimv(0x01) + 1))
 //console.log(RAM)
 
 
-function throwError(errorCode, addrTemp="[Not Specified.]") {
+function throwError(errorCode, addrTemp = "[Not Specified.]") {
     ByRAMaddr = addrTemp;
-    if(addrTemp != "[Not Specified.]"){
-        ByRAMaddr = "0".repeat(4-addrTemp.length) + addrTemp;
+    if (addrTemp != "[Not Specified.]") {
+        ByRAMaddr = "0".repeat(4 - addrTemp.length) + addrTemp;
     }
     console.log("An error occured.\n\nReason: " + [
         `Program is too large.`,
@@ -264,26 +264,28 @@ function throwError(errorCode, addrTemp="[Not Specified.]") {
         `Value overflow at $${ByRAMaddr}.`,
         `Value underflow at $${ByRAMaddr}.`,
         `Invalid value at $${ByRAMaddr}.`,
-    ][errorCode] + `\n\nError originated at the instruction at address $${"0".repeat(4-(gimv(0x01)+255).toString(16).length)+(gimv(0x01)+255).toString(16)}.`);
+    ][errorCode] + `\n\nError originated at the instruction at address $${"0".repeat(4 - (gimv(0x01) + 255).toString(16).length) + (gimv(0x01) + 255).toString(16)}.`);
 
     process.exit();
 }
 
 function setRAMaddr(hex, value) {
     if (hex > 0xFFFF) {
-        throwError(2,hex.toString(16));
+        throwError(2, hex.toString(16));
     }
     if (value > 0xFFFFFF) {
-        throwError(3,hex.toString(16));
+        throwError(3, hex.toString(16));
     }
     if (value < 0) {
-        throwError(4,hex.toString(16));
+        throwError(4, hex.toString(16));
     }
     return RAM[hex] = value;
 }
+
 function gimv(hex) { // retrieve IntMEM value
     return RAM[hex + 0xFF00];
 }
+
 function simv(hex, value) { // set IntMEM value
     return setRAMaddr(hex + 0xFF00, value);
 }
