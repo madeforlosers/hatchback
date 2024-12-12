@@ -41,27 +41,22 @@ for (simv(0x00, 0); gimv(0x00) < file.length; simv(0x00, gimv(0x00) + 1)) {
 // you have to do ACE to go to other places in memory LMAOOO
 
 /* Operations */
-function setPlaceInRamCommand() {
-    // required arguments: 2 (position and value)
-    simv(0x03, RAM[gimv(0x01) + 256]); //position
-    simv(0x04, RAM[gimv(0x01) + 257]); //value
-    setRAMaddr(gimv(0x03), gimv(0x04));// set value in memory
+// (thanks mykal for cleaning this up)
 
-    simv(0x03, 0); // clear 
-    simv(0x04, 0);
+// todo: comment these better
+function setPlaceInRamCommand() {
+    setRAMaddr(gimv(0x03), gimv(0x04));// set value in memory
+    simv(0x03, 0); // clear arguments (gotta make a function to do this, or just not clear them at all
+    simv(0x04, 0); //                  because they get overwritten anyways LMAO)
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function outputNewlineCommand() {
-    // required argument: 1 (position in memory)
     console.log(RAM[RAM[gimv(0x01) + 256]]);
     simv(0x01, gimv(0x01) + 1);
 }
 
 function additionCommand() {
-    // required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] + RAM[gimv(0x04)]);
     simv(0x03, 0); // clear 
     simv(0x04, 0);
@@ -69,55 +64,35 @@ function additionCommand() {
 }
 
 function subtractionCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] - RAM[gimv(0x04)]);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function multiplicationCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] * RAM[gimv(0x04)]);
-
     simv(0x03, 0); // Clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // Skip arguments at the end
 }
 
 function divisionCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     if (RAM[gimv(0x04)] == 0) throwError(1);
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] / RAM[gimv(0x04)]);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // Skip arguments at the end
 }
 
 function modulusCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] % RAM[gimv(0x04)]);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function booleanCommand() {
-    // Required arguments: 3 (bool, position and value)
-    simv(0x03, RAM[gimv(0x01) + 256]); //bool
-    simv(0x04, RAM[gimv(0x01) + 257]); //position
-    simv(0x05, RAM[gimv(0x01) + 258]); //value
     if (RAM[gimv(0x03)] != 0) setRAMaddr(gimv(0x04), gimv(0x05));
     simv(0x03, 0); // clear 
     simv(0x04, 0);
@@ -126,46 +101,30 @@ function booleanCommand() {
 }
 
 function greaterThanCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     if (RAM[gimv(0x04)] == 0) throwError(1);
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] > RAM[gimv(0x04)] ? 1 : 0);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function equalToCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     if (RAM[gimv(0x04)] == 0) throwError(1);
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] == RAM[gimv(0x04)] ? 1 : 0);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function lessThanCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     if (RAM[gimv(0x04)] == 0) throwError(1);
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] < RAM[gimv(0x04)] ? 1 : 0);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // Skip arguments at the end
 }
 
 function copyCommand() {
-    // Required arguments: 2 (position and value)
-    simv(0x03, RAM[gimv(0x01) + 256]); //position
-    simv(0x04, RAM[gimv(0x01) + 257]); //value
-    // RAM[gimv(0x03)] = RAM[gimv(0x04)]; // set value in memory
     setRAMaddr(gimv(0x03), RAM[gimv(0x04)]);
     simv(0x03, 0); // clear 
     simv(0x04, 0);
@@ -173,9 +132,6 @@ function copyCommand() {
 }
 
 function variableDrivenCopyCommand() {
-    // Required arguments: 2 (position and value)
-    simv(0x03, RAM[gimv(0x01) + 256]); //position
-    simv(0x04, RAM[gimv(0x01) + 257]); //value
     setRAMaddr(gimv(0x03), RAM[RAM[gimv(0x04)]]);
     simv(0x03, 0); // clear 
     simv(0x04, 0);
@@ -183,103 +139,128 @@ function variableDrivenCopyCommand() {
 }
 
 function inlineOutputCommand() {
-    // Required argument: 1 (position in memory)
     process.stdout.write(RAM[RAM[gimv(0x01) + 256]].toString());
     simv(0x01, gimv(0x01) + 1);
 }
 
 function inlineOutputFromCharCommand() {
-    // Required argument: 1 (position in memory)
     process.stdout.write(String.fromCharCode(RAM[RAM[gimv(0x01) + 256]]));
     simv(0x01, gimv(0x01) + 1);
 }
 
 function notEqualToCommand() {
-    // Required arguments: 2 (assigner and howMuch)
-    simv(0x03, RAM[gimv(0x01) + 256]); //assigner
-    simv(0x04, RAM[gimv(0x01) + 257]); //howMuch
     if (RAM[gimv(0x04)] == 0) throwError(1);
     setRAMaddr(gimv(0x03), RAM[gimv(0x03)] != RAM[gimv(0x04)] ? 1 : 0);
-
     simv(0x03, 0); // clear 
     simv(0x04, 0);
     simv(0x01, gimv(0x01) + 2); // skip arguments at the end
 }
 
 function inputCommand() {
-    // Required arguments: 1 (position)
-    simv(0x03, RAM[gimv(0x01) + 256]); //position
     setRAMaddr(gimv(0x03), parseInt(prompt(">")));// set value in memory
     if (isNaN(RAM[gimv(0x03)])) // if it's NaN, error
         throwError(5, (gimv(0x03)).toString(16).toUpperCase());
-
     simv(0x03, 0); // clear 
     simv(0x01, gimv(0x01) + 1); // skip arguments at the end
 }
-
-for (simv(0x01, 0); RAM[gimv(0x01) + 255] != 0xFFFF; simv(0x01, gimv(0x01) + 1))
-{
+function reverseSubtractionCommand() {
+    setRAMaddr(gimv(0x03), RAM[gimv(0x04)] - RAM[gimv(0x03)]);
+    // what's really annoying is that I can't just swap the arguments and run subtractionCommand();
+    simv(0x03, 0); // clear 
+    simv(0x04, 0);
+    simv(0x01, gimv(0x01) + 2); // skip arguments at the end
+}
+function reverseDivisionCommand() {
+    setRAMaddr(gimv(0x03), RAM[gimv(0x04)] / RAM[gimv(0x03)]);
+    simv(0x03, 0); // clear 
+    simv(0x04, 0);
+    simv(0x01, gimv(0x01) + 2); // skip arguments at the end
+}
+for (simv(0x01, 0); RAM[gimv(0x01) + 255] != 0xFFFF; simv(0x01, gimv(0x01) + 1)) {
     if (RAM.length > 65535) throwError(2); // RAM can not exceed 0xFFFF
     // this doesn't HAVE to exist but its an esoteric language, i can do whatever the hell I want!!
 
 
-    // DO NOT get mad at me for not using a switch case for this.
-    // switch cases r really fucking annoying in javascript so leave me alone lol
+    // finally used a switch case lol
 
     simv(0x02, RAM[gimv(0x01) + 255]) //current instruction
     // simv(0x03,RAM[gimv(0x01)+255+N]) is to get the next N instructions
 
     switch (gimv(0x02)) {
         case 0: // a: SET PLACE IN RAM
+            initializeArguments(2);
             setPlaceInRamCommand();
             break;
         case 1: // b: OUTPUT
+            initializeArguments(1);
             outputNewlineCommand();
             break;
         case 2:// c: ADDITION ASSIGNMENT
+            initializeArguments(2);
             additionCommand();
             break;
         case 3: // d: SUBTRACTION ASSIGNMENT
+            initializeArguments(2);
             subtractionCommand();
             break;
         case 4: // e: MULTIPLICATION ASSIGNMENT
+            initializeArguments(2);
             multiplicationCommand();
             break;
         case 5: // f: DIVISION ASSIGNMENT
+            initializeArguments(2);
             divisionCommand();
             break;
         case 6: // BOOLEAN ASSIGNMENT
+            initializeArguments(3);
             booleanCommand();
             break;
-        case 7: // f: GREATER-THAN ASSIGNMENT OPERATION 
+        case 7: // GREATER-THAN ASSIGNMENT OPERATION 
+            initializeArguments(2);
             greaterThanCommand();
             break;
-        case 8: // f: EQUAL-TO ASSIGNMENT OPERATION 
+        case 8: // EQUAL-TO ASSIGNMENT OPERATION 
+            initializeArguments(2);
             equalToCommand();
             break;
-        case 9: // f: LESSER-THAN ASSIGNMENT OPERATION 
+        case 9: // LESSER-THAN ASSIGNMENT OPERATION 
+            initializeArguments(2);
             lessThanCommand();
             break;
-        case 10: // a: COPY
+        case 10: // COPY
+            initializeArguments(2);
             copyCommand();
             break;
-        case 11: // a: VARIABLE-DRIVEN COPY
+        case 11: // VARIABLE-DRIVEN COPY
+            initializeArguments(2);
             variableDrivenCopyCommand();
             break;
-        case 12: // b: INLINE OUTPUT
+        case 12: // INLINE OUTPUT
+            // 12 and 13 don't need the arguments lol
             inlineOutputCommand();
             break;
-        case 13: // b: INLINE OUTPUT FROM CHAR
+        case 13: // INLINE OUTPUT FROM CHAR
             inlineOutputFromCharCommand();
             break;
-        case 14: // f: NOT-EQUAL-TO ASSIGNMENT OPERATION 
+        case 14: // NOT-EQUAL-TO ASSIGNMENT OPERATION 
+            initializeArguments(2);
             notEqualToCommand();
             break;
-        case 15: // e: MODULO
+        case 15: // MODULO
+            initializeArguments(1);
             modulusCommand();
             break;
-        case 16: // a: PROMPT INPUT
+        case 16: // PROMPT INPUT
+            initializeArguments(1);
             inputCommand();
+            break;
+        case 17: // REVERSE SUBTRACTION
+            initializeArguments(2);
+            reverseSubtractionCommand(); // hopefully this works
+            break;
+        case 18: // REVERSE DIVISION
+            initializeArguments(2);
+            reverseDivisionCommand();
             break;
     }
 }
@@ -306,6 +287,17 @@ function throwError(errorCode, addrTemp = "[Not Specified.]") {
     }
     process.exit();
 }
+
+function initializeArguments(amount) {
+    for (simv(0x00, 0); gimv(0x00) < amount; simv(0x00, gimv(0x00) + 1)) { // loop to get certain amount of arguments for command
+        simv(gimv(0x00) + 3, RAM[gimv(0x01) + 256 + gimv(0x00)]); // set $FF03+[$FF00] to argument for command
+        // console.log( RAM[gimv(0x01) + 256+gimv(0x00)]) debug lol
+    }
+
+    // this looks really complicated but it works i guess
+}
+
+// i'll make these into a class one day. I gotta get mykal to help me with it though
 
 function setRAMaddr(hex, value) {
     if (hex > 0xFFFF)
