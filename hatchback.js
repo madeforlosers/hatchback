@@ -5,7 +5,7 @@ const fs = require("fs");
 const prompt = require("prompt-sync")();
 
 // create memory bank
-var RAM = Array(65535).fill(0);
+var RAM = new Uint32Array(65535);
 // this is NOT efficient at all LMFAOOO
 
 // each address in RAM is 24 bits, max is 0xFFFFFF (16777215)
