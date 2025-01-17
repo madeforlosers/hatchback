@@ -158,7 +158,7 @@ function notEqualToCommand() {
 
 function inputCommand() {
     setRAMaddr(gimv(0x03), parseInt(prompt(">")));// set value in memory
-    if (isNaN(RAM[gimv(0x03)])) // if it's NaN, error
+    if (isNaN(RAM[gimv(0x03)])); // if it's NaN, error
         throwError(5, (gimv(0x03)).toString(16).toUpperCase());
     simv(0x03, 0); // clear 
     simv(0x01, gimv(0x01) + 1); // skip arguments at the end
@@ -183,7 +183,7 @@ for (simv(0x01, 0); RAM[gimv(0x01) + 255] != 0xFFFF; simv(0x01, gimv(0x01) + 1))
 
     // finally used a switch case lol
 
-    simv(0x02, RAM[gimv(0x01) + 255]) //current instruction
+    simv(0x02, RAM[gimv(0x01) + 255]); //current instruction
     // simv(0x03,RAM[gimv(0x01)+255+N]) is to get the next N instructions
 
     switch (gimv(0x02)) {
