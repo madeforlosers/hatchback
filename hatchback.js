@@ -61,14 +61,14 @@ class Hatchback {
     loadProgram() {
         this.file = fs.readFileSync(process.argv[2], "utf8").split(/\s/g);
         // Ensure the program is small enough to fit in (it will be lol)
-        if (this.file.length + 255 >= 65280) throwError(0);
+        if (this.file.length + 255 >= 65280) Hatchback.throwError(0);
     };
     writeToProgRAM(){
         // write file to "ProgRAM" (00FF - FF00)
         for (RAM.set.intMEM(0x00, 0); RAM.get.intMEM(0x00) < this.file.length; RAM.set.intMEM(0x00, RAM.get.intMEM(0x00) + 1)) {
             RAM.RAMBlock[RAM.get.intMEM(0x00) + 255] = parseInt(this.file[RAM.get.intMEM(0x00)]);
             if (isNaN(RAM.RAMBlock[RAM.get.intMEM(0x00) + 255]))
-                throwError(5, (RAM.get.intMEM(0x00) + 255).toString(16).toUpperCase());
+                Hatchback.throwError(5, (RAM.get.intMEM(0x00) + 255).toString(16).toUpperCase());
         }
         // you can use "0 65281 N" to move to a location 
         // you have to do ACE to go to other places in memory LMAOOO
@@ -76,7 +76,7 @@ class Hatchback {
 
     runProgram() {
         for (RAM.set.intMEM(0x01, 0); RAM.RAMBlock[RAM.get.intMEM(0x01) + 255] != 0xFFFF; RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 1)) {
-            if (RAM.RAMBlock.length > 65535) throwError(2); // RAM can not exceed 0xFFFF
+            if (RAM.RAMBlock.length > 65535) Hatchback.throwError(2); // RAM can not exceed 0xFFFF
             // this doesn't HAVE to exist but its an esoteric language, i can do whatever the hell I want!!
 
 
@@ -196,7 +196,7 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 2); // Skip arguments at the end
         },
         divisionCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) throwError(1);
+            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] / RAM.RAMBlock[RAM.get.intMEM(0x04)]);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
@@ -216,21 +216,21 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 3); // skip arguments at the end
         },
         greaterThanCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) throwError(1);
+            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] > RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 2); // skip arguments at the end
         },
         equalToCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) throwError(1);
+           // if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] == RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 2); // skip arguments at the end
         },
         lessThanCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) throwError(1);
+            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] < RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
@@ -257,7 +257,7 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 1);
         },
         notEqualToCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) throwError(1);
+            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] != RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
