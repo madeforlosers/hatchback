@@ -5,6 +5,8 @@
 // still requires some looking over but it works for now
 
 const fs = require("fs");
+const prompt = require("prompt-sync")();
+
 class RAM { // static class
     static RAMBlock = new Uint32Array(65535);
     // this is NOT efficient at all LMFAOOO
@@ -263,8 +265,9 @@ class Hatchback {
         },
         inputCommand() {
             RAM.set.address(RAM.get.intMEM(0x03), parseInt(prompt(">")));// set value in memory
-            if (isNaN(RAM.RAMBlock[RAM.get.intMEM(0x03)])); // if it's NaN, error
-            throwError(5, (RAM.get.intMEM(0x03)).toString(16).toUpperCase());
+            if (isNaN(RAM.RAMBlock[RAM.get.intMEM(0x03)])){ // if it's NaN, error
+                Hatchback.throwError(5, (RAM.get.intMEM(0x03)).toString(16).toUpperCase());
+            }
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 1); // skip arguments at the end
         },
