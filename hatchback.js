@@ -146,7 +146,7 @@ class Hatchback {
                     this.commands.notEqualToCommand();
                     break;
                 case 15: // MODULO
-                    this.initializeArguments(1);
+                    this.initializeArguments(2);
                     this.commands.modulusCommand();
                     break;
                 case 16: // PROMPT INPUT
@@ -216,7 +216,7 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 3); // skip arguments at the end
         },
         greaterThanCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
+           // if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] > RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
@@ -230,7 +230,7 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 2); // skip arguments at the end
         },
         lessThanCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
+           // if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] < RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
@@ -257,7 +257,7 @@ class Hatchback {
             RAM.set.intMEM(0x01, RAM.get.intMEM(0x01) + 1);
         },
         notEqualToCommand() {
-            if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
+           // if (RAM.RAMBlock[RAM.get.intMEM(0x04)] == 0) Hatchback.throwError(1);
             RAM.set.address(RAM.get.intMEM(0x03), RAM.RAMBlock[RAM.get.intMEM(0x03)] != RAM.RAMBlock[RAM.get.intMEM(0x04)] ? 1 : 0);
             RAM.set.intMEM(0x03, 0); // clear 
             RAM.set.intMEM(0x04, 0);
